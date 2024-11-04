@@ -16,14 +16,14 @@ jobs:
           issue_title="${{ github.event.issue.title }}"
           major=$(echo "$issue_title" | cut -d '.' -f 1)
           minor=$(echo "$issue_title" | cut -d '.' -f 2)
-          patch=$(echo "$issue_title" | cut -d '.' -f 3)
+          micro=$(echo "$issue_title" | cut -d '.' -f 3)
           echo "major=$major" >> $GITHUB_OUTPUT
           echo "minor=$minor" >> $GITHUB_OUTPUT
-          echo "patch=$patch" >> $GITHUB_OUTPUT
+          echo "micro=$micro" >> $GITHUB_OUTPUT
       - name: Delete Existing Version Update Branch
         run: git push --delete origin workflows/version-update || true    
       - name: Create Release Branch
-        if: steps.extract-version.outputs.patch == 0
+        if: steps.extract-version.outputs.micro == 0
         run: |
           git checkout -b release/${{ steps.extract-version.outputs.major }}.${{ steps.extract-version.outputs.minor }}.x
           git push origin release/${{ steps.extract-version.outputs.major }}.${{ steps.extract-version.outputs.minor }}.x
@@ -40,5 +40,5 @@ jobs:
           sed -i "s/micro: int = \([0-9]\+\)/micro: int = 0/g" heat/core/version.py
           sed -i "s/extension: str = .*/extension: str = None/g" heat/core/version.py
           git add heat/core/version.py
-          git commit -m "Bump version to ${{ steps.extract-version.outputs.major }}.${{ steps.extract-version.outputs.minor }}.${{ steps.extract-version.outputs.patch }}"
+          git commit -m "Bump version to ${{ steps.extract-version.outputs.major }}.${{ steps.extract-version.outputs.minor }}.${{ steps.extract-version.outputs.micro }}"
           git push origin workflows/version-update
