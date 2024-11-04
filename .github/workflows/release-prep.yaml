@@ -34,6 +34,7 @@ jobs:
       - name: Bump Version
         if: always()
         run: |
+          git fetch origin
           git checkout -b workflows/version-update origin/release/${{ steps.extract-version.outputs.major }}.${{ steps.extract-version.outputs.minor }}.x  # Fetch from origin
           sed -i "s/major: int = \([0-9]\+\)/major: int = ${{ steps.extract-version.outputs.major }}/g" heat/core/version.py
           sed -i "s/minor: int = \([0-9]\+\)/minor: int = ${{ steps.extract-version.outputs.minor }}/g" heat/core/version.py
