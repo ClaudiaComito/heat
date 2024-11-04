@@ -30,6 +30,10 @@ jobs:
         run: |
           git checkout -b release/${{ steps.extract-version.outputs.major }}.${{ steps.extract-version.outputs.minor }}.x
           git push origin release/${{ steps.extract-version.outputs.major }}.${{ steps.extract-version.outputs.minor }}.x
+      - name: Configure Git User (Local)
+        run: |
+          git config user.email "c.comito@fz-juelich.de"
+          git config user.name "ClaudiaComito"
       - name: Bump Version
         if: always()
         run: |
