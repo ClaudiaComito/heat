@@ -14,7 +14,7 @@ jobs:
         if: contains(github.event.issue.labels.*.name, 'release-prep')
         run: |
           issue_title="${{ github.event.issue.title }}"
-          regex="Prepare release v(\d+)\.(\d+)\.(\d+)"
+          regex="(?i)Prepare release v(\d+)\.(\d+)\.(\d+)"
           if [[ $issue_title =~ $regex ]]; then
             echo "major=${BASH_REMATCH[1]}" >> $GITHUB_OUTPUT
             echo "minor=${BASH_REMATCH[2]}" >> $GITHUB_OUTPUT
