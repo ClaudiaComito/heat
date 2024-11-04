@@ -14,17 +14,12 @@ jobs:
         if: contains(github.event.issue.labels.*.name, 'release-prep')
         run: |
           issue_title="${{ github.event.issue.title }}"
-          regex="^v(\d+)\.(\d+)\.(\d+)$"
-          echo "Issue title: $issue_title"
-          echo "Regular expression: $regex"
-          if [[ $issue_title =~ $regex ]]; then
-            echo "major=${BASH_REMATCH[1]}" >> $GITHUB_OUTPUT
-            echo "minor=${BASH_REMATCH[2]}" >> $GITHUB_OUTPUT
-            echo "patch=${BASH_REMATCH[3]}" >> $GITHUB_OUTPUT
-          else
-            echo "::error::Issue title does not match the expected format. Please use 'Prepare release vX.Y.Z'."
-            exit 1
-          fi
+          major=$(echo "$issue_title" | cut -d '.' -f 1)
+          minor=$(echo "$issue_title" | cut -d '.' -f 2)
+          patch=$(echo "$issue_title" | cut -d '.' -f 3)
+          echo "major=$major" >> $GITHUB_OUTPUT
+          echo "minor=$minor" >> $GITHUB_OUTPUT
+          echo "patch=$patch" >> $GITHUB_OUTPUT
       - name: Delete Existing Version Update Branch
         run: |
           git branch -D workflows/version-update 2> /dev/null
