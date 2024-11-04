@@ -21,10 +21,7 @@ jobs:
           echo "minor=$minor" >> $GITHUB_OUTPUT
           echo "patch=$patch" >> $GITHUB_OUTPUT
       - name: Delete Existing Version Update Branch
-        run: |
-          if [[ $(git branch -a | grep -c "workflows/version-update") -gt 0 ]]; then
-            git branch -D workflows/version-update
-          fi      
+        run: git push --delete origin workflows/version-update || true    
       - name: Create Release Branch
         if: steps.extract-version.outputs.patch == 0
         run: |
