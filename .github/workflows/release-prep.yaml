@@ -22,7 +22,9 @@ jobs:
           echo "patch=$patch" >> $GITHUB_OUTPUT
       - name: Delete Existing Version Update Branch
         run: |
-          git branch -D workflows/version-update 2> /dev/null
+          if [[ $(git branch -a | grep -c "workflows/version-update") -gt 0 ]]; then
+            git branch -D workflows/version-update
+          fi      
       - name: Create Release Branch
         if: steps.extract-version.outputs.patch == 0
         run: |
