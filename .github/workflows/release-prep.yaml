@@ -33,6 +33,11 @@ jobs:
         run: |
           git checkout -b release/${{ steps.extract-version.outputs.major }}.${{ steps.extract-version.outputs.minor }}.x
           git push origin release/${{ steps.extract-version.outputs.major }}.${{ steps.extract-version.outputs.minor }}.x
+      - name: Check out release branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: 'release/${{ steps.extract-version.outputs.major }}.${{ steps.extract-version.outputs.minor }}.x'
       - name: Configure Git User (Local)
         run: |
           git config user.email "c.comito@fz-juelich.de"
@@ -41,7 +46,7 @@ jobs:
         if: always()
         run: |
           git fetch origin
-          git checkout -b ${{ env.working_branch }} origin/release/${{ steps.extract-version.outputs.major }}.${{ steps.extract-version.outputs.minor }}.x  # Fetch from origin
+          git checkout -b ${{ env.working_branch }}
           sed -i "s/major: int = \([0-9]\+\)/major: int = ${{ steps.extract-version.outputs.major }}/g" heat/core/version.py
           sed -i "s/minor: int = \([0-9]\+\)/minor: int = ${{ steps.extract-version.outputs.minor }}/g" heat/core/version.py
           sed -i "s/micro: int = \([0-9]\+\)/micro: int = ${{ steps.extract-version.outputs.micro }}/g" heat/core/version.py
