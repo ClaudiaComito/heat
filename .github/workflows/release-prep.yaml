@@ -51,8 +51,8 @@ jobs:
           sed -i "s/minor: int = \([0-9]\+\)/minor: int = ${{ steps.extract-version.outputs.minor }}/g" heat/core/version.py
           sed -i "s/micro: int = \([0-9]\+\)/micro: int = ${{ steps.extract-version.outputs.micro }}/g" heat/core/version.py
           sed -i "s/extension: str = .*/extension: str = None/g" heat/core/version.py
-          git add heat/core/version.py
-          git push
+#          git add heat/core/version.py
+#          git push --set-upstream origin ${{ env.working_branch }}
       - name: Create PR from branch
         uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f # v7.0.5
         with:
